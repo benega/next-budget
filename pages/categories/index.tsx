@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   CategoriesTable,
   Category,
-} from '../client/features/category/categories-table'
-import { CategoryForm } from '../client/features/category/category-form'
+} from '../../client/features/category/categories-table'
+import { CategoryForm } from '../../client/features/category/category-form'
 
 const categories: Category[] = [
   { id: uuidv4(), name: 'Home' },
@@ -16,7 +16,8 @@ const categories: Category[] = [
   { id: uuidv4(), name: 'Gifts' },
   { id: uuidv4(), name: 'Others' },
 ]
-export default function Home() {
+
+export default function Categories() {
   return (
     <div>
       <Head>
@@ -24,7 +25,12 @@ export default function Home() {
         <meta name="description" content="Next Budget App" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className="text-2xl font-bold mb-4">Home</h1>
+
+      <main className="container mx-auto p-4 flex flex-col items-center bg-blue-50 h-screen">
+        <h1 className="text-2xl font-bold mb-4">Categories</h1>
+        <CategoryForm />
+        <CategoriesTable categories={categories} />
+      </main>
     </div>
   )
 }
