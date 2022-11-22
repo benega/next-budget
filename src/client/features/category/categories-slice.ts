@@ -26,8 +26,11 @@ const categoriesSlice = createSlice({
     categoryAdded(state, action: PayloadAction<Category>) {
       state.categories.push({ ...action.payload, id: uuidv4() })
     },
+    categoryArchived(state, action: PayloadAction<Category>) {
+      state.categories = state.categories.filter(c => c.id != action.payload.id)
+    },
   },
 })
 
-export const { categoryAdded } = categoriesSlice.actions
+export const { categoryAdded, categoryArchived } = categoriesSlice.actions
 export default categoriesSlice.reducer
