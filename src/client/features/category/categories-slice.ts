@@ -23,11 +23,11 @@ const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
   reducers: {
-    add(state, action: PayloadAction<Category>) {
-      state.categories.push(action.payload)
+    categoryAdded(state, action: PayloadAction<Category>) {
+      state.categories.push({ ...action.payload, id: uuidv4() })
     },
   },
 })
 
-export const { add } = categoriesSlice.actions
+export const { categoryAdded } = categoriesSlice.actions
 export default categoriesSlice.reducer
