@@ -1,16 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { MdOutlineArchive } from 'react-icons/md'
 import { Category } from '../../../common/models/category'
-import { categoryArchived } from './categories-slice'
+import { categoryArchived, fetchCategories } from './categories-slice'
 
 export const CategoriesTable = () => {
-  const { categories } = useAppSelector(state => state.categories)
   const dispatch = useAppDispatch()
+  const { categories, status } = useAppSelector(state => state.categories)
 
   const handleArchive = (category: Category) => {
     dispatch(categoryArchived(category))
   }
+
+  useEffect(() => {
+    if (status === 'idle') dispatch(fetchCategories())
+  }, [status, dispatch])
+
+  if (status === 'loading') return <p>Loading...</p>
 
   return (
     <div className="overflow-x-auto self-start bg-slate-100 w-full text-left">
