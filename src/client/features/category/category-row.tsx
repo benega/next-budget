@@ -1,4 +1,5 @@
 import { MdOutlineArchive } from 'react-icons/md'
+import { useSelector } from 'react-redux'
 import { Category } from '../../../common/models/category'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { categoryArchived, selectCategoryById } from './categories-slice'

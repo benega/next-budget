@@ -1,17 +1,18 @@
-import { useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { fetchCategories, selectAllCategories } from './categories-slice'
+import { useAppSelector } from '../../app/hooks'
+import {
+  getCategoriesError,
+  getCategoriesStatus,
+  selectCategoriesIds,
+} from './categories-slice'
 import { CategoryRow } from './category-row'
 
 export const CategoriesTable = () => {
-  const dispatch = useAppDispatch()
-  const { categories, status } = useAppSelector(selectAllCategories)
-
-  useEffect(() => {
-    if (status === 'idle') dispatch(fetchCategories())
-  }, [status, dispatch])
+  const status = useAppSelector(getCategoriesStatus)
+  const error = useAppSelector(getCategoriesError)
+  const categoriesIds = useAppSelector(selectCategoriesIds)
 
   if (status === 'loading') return <p>Loading...</p>
+  if (status === 'failed') return <p>{error}</p>
 
   return (
     <div className="overflow-x-auto self-start bg-slate-100 w-full text-left">
@@ -23,8 +24,8 @@ export const CategoriesTable = () => {
           </tr>
         </thead>
         <tbody className="bg-white">
-          {categories.map(c => (
-            <CategoryRow key={c.id} categoryId={c.id} />
+          {categoriesIds.map(c => (
+            <CategoryRow key={c.toString()} categoryId={c.toString()} />
           ))}
         </tbody>
       </table>

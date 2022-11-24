@@ -3,35 +3,31 @@ import {
   PayloadAction,
   nanoid,
   createAsyncThunk,
+  createEntityAdapter,
 } from '@reduxjs/toolkit'
 import { Category } from '../../../common/models/category'
 import { ApiStatus } from '../../../common/types/api-status'
 import { RootState } from '../../app/store'
+import { categoriesApi } from './categories-api'
 
-export type CategoriesState = {
-  categories: Category[]
+export type CommonEntityState = {
   status: ApiStatus
   error?: string
 }
 
-const initialState: CategoriesState = {
-  categories: [],
+const categoriesAdapter = createEntityAdapter<Category>({
+  sortComparer: (a, b) => a.name.localeCompare(b.name),
+})
+
+const initialState = categoriesAdapter.getInitialState<CommonEntityState>({
   status: 'idle',
-}
+})
 
 export const fetchCategories = createAsyncThunk(
   'categories/fetchAll',
   async () => {
-    return [
-      { id: nanoid(), name: 'Home' },
-      { id: nanoid(), name: 'Car' },
-      { id: nanoid(), name: 'Food' },
-      { id: nanoid(), name: 'Personal' },
-      { id: nanoid(), name: 'Subscriptions' },
-      { id: nanoid(), name: 'Charity' },
-      { id: nanoid(), name: 'Gifts' },
-      { id: nanoid(), name: 'Others' },
-    ]
+    console.log('categories/fetchAll')
+    return categoriesApi.getAll()
   }
 )
 
@@ -40,10 +36,10 @@ const categoriesSlice = createSlice({
   initialState,
   reducers: {
     categoryAdded(state, action: PayloadAction<Category>) {
-      state.categories.push({ ...action.payload, id: nanoid() })
+      categoriesAdapter.upsertOne(state, { ...action.payload, id: nanoid() })
     },
     categoryArchived(state, action: PayloadAction<Category>) {
-      state.categories = state.categories.filter(c => c.id != action.payload.id)
+      categoriesAdapter.removeOne(state, action.payload.id)
     },
   },
   extraReducers(builder) {
@@ -53,7 +49,7 @@ const categoriesSlice = createSlice({
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        state.categories = action.payload
+        categoriesAdapter.upsertMany(state, action.payload)
       })
       .addCase(fetchCategories.rejected, (state, action) => {
         state.status = 'failed'
@@ -62,13 +58,21 @@ const categoriesSlice = createSlice({
   },
 })
 
-export const selectAllCategories = (state: RootState) => ({
-  categories: state.categories.categories,
-  status: state.categories.status,
-})
+// export const selectAllCategories = (state: RootState) => ({
+//   categories: state.categories.en,
+//   status: state.categories.status,
+// })
 
-export const selectCategoryById = (state: RootState, id: string) =>
-  state.categories.categories.find(c => c.id === id)
+// export const selectCategoryById = (state: RootState, id: string) =>
+//   state.categories.categories.find(c => c.id === id)
+
+export const {
+  selectIds: selectCategoriesIds,
+  selectById: selectCategoryById,
+} = categoriesAdapter.getSelectors<RootState>(state => state.categories)
+
+export const getCategoriesStatus = (state: RootState) => state.categories.status
+export const getCategoriesError = (state: RootState) => state.categories.error
 
 export const { categoryAdded, categoryArchived } = categoriesSlice.actions
 export default categoriesSlice.reducer
