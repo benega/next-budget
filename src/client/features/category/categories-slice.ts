@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit'
 import { Category } from '../../../common/models/category'
 import { ApiStatus } from '../../../common/types/api-status'
+import { RootState } from '../../app/store'
 
 export type CategoriesState = {
   categories: Category[]
@@ -61,7 +62,13 @@ const categoriesSlice = createSlice({
   },
 })
 
-export const selectAllCategories = (state: CategoriesState) => state.categories
+export const selectAllCategories = (state: RootState) => ({
+  categories: state.categories.categories,
+  status: state.categories.status,
+})
+
+export const selectCategoryById = (state: RootState, id: string) =>
+  state.categories.categories.find(c => c.id === id)
 
 export const { categoryAdded, categoryArchived } = categoriesSlice.actions
 export default categoriesSlice.reducer

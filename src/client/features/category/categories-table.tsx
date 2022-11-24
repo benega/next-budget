@@ -1,16 +1,11 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { MdOutlineArchive } from 'react-icons/md'
-import { Category } from '../../../common/models/category'
-import { categoryArchived, fetchCategories } from './categories-slice'
+import { fetchCategories, selectAllCategories } from './categories-slice'
+import { CategoryRow } from './category-row'
 
 export const CategoriesTable = () => {
   const dispatch = useAppDispatch()
-  const { categories, status } = useAppSelector(state => state.categories)
-
-  const handleArchive = (category: Category) => {
-    dispatch(categoryArchived(category))
-  }
+  const { categories, status } = useAppSelector(selectAllCategories)
 
   useEffect(() => {
     if (status === 'idle') dispatch(fetchCategories())
@@ -29,17 +24,7 @@ export const CategoriesTable = () => {
         </thead>
         <tbody className="bg-white">
           {categories.map(c => (
-            <tr key={c.id} className="border-b border-gray-200">
-              <td className="p-2">{c.name}</td>
-              <td className="p-2">
-                <button
-                  className="cursor-pointer"
-                  onClick={() => handleArchive(c)}
-                >
-                  <MdOutlineArchive color="gray" size={24} />
-                </button>
-              </td>
-            </tr>
+            <CategoryRow key={c.id} categoryId={c.id} />
           ))}
         </tbody>
       </table>
