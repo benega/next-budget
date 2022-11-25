@@ -58,14 +58,6 @@ const categoriesSlice = createSlice({
   },
 })
 
-// export const selectAllCategories = (state: RootState) => ({
-//   categories: state.categories.en,
-//   status: state.categories.status,
-// })
-
-// export const selectCategoryById = (state: RootState, id: string) =>
-//   state.categories.categories.find(c => c.id === id)
-
 export const {
   selectIds: selectCategoriesIds,
   selectById: selectCategoryById,
