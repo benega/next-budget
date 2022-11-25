@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^4.6.1",
     "@reduxjs/toolkit": "^1.9.0",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
@@ -26,6 +27,7 @@
     "autoprefixer": "^10.4.13",
     "faker-js": "^1.0.0",
     "postcss": "^8.4.19",
+    "prisma": "^4.6.1",
     "tailwindcss": "^3.2.4"
   }
 }
