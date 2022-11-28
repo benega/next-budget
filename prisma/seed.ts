@@ -30,12 +30,66 @@ async function main() {
   //     },
   //   })
 
-  const users = await prisma.user.findMany({ include: { friends: true } })
-  const categories = (await prisma.category.findMany({
-    include: { subcategories: true },
-  })) as Category[]
+  let cat1 = await prisma.category.findFirst({
+    where: {
+      name: 'Category 1',
+    },
+  })
 
-  console.log(categories[1])
+  if (cat1) {
+    cat1 = await prisma.category.update({
+      where: {
+        id: cat1.id,
+      },
+      data: {
+        subcategories: {
+          create: {
+            name: 'Category 1.4',
+          },
+        },
+      },
+      include: {
+        subcategories: true,
+      },
+    })
+
+    console.log(JSON.stringify(cat1, null, 4))
+  }
+
+  //   await prisma.category.update({
+  //     where: {
+  //       id: cat1.id,
+  //     },
+  //     data: {
+  //       subcategories: {
+  //         create: {
+  //           name: 'Category 1.1',
+  //         },
+  //       },
+  //     },
+  //   })
+
+  //   await prisma.category.update({
+  //     where: {
+  //       id: cat1.id,
+  //     },
+  //     data: {
+  //       subcategories: {
+  //         create: {
+  //           name: 'Category 1.2',
+  //         },
+  //       },
+  //     },
+  //   })
+
+  //   const categories = await prisma.category.findMany({
+  //     where: {
+  //       parent: null,
+  //     },
+  //     include: { subcategories: true, parent: true },
+  //   })
+
+  //   console.log(JSON.stringify(categories, null, 4))
 }
 
 main()
