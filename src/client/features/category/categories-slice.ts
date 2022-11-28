@@ -1,14 +1,14 @@
 import {
-  createSlice,
-  PayloadAction,
-  nanoid,
   createAsyncThunk,
   createEntityAdapter,
+  createSlice,
+  nanoid,
+  PayloadAction,
 } from '@reduxjs/toolkit'
-import { Category } from '../../../common/models/category'
+import axios from 'axios'
+import { Category } from '@prisma/client'
 import { ApiStatus } from '../../../common/types/api-status'
 import { RootState } from '../../app/store'
-import { categoriesApi } from './categories-api'
 
 export type CommonEntityState = {
   status: ApiStatus
@@ -26,8 +26,9 @@ const initialState = categoriesAdapter.getInitialState<CommonEntityState>({
 export const fetchCategories = createAsyncThunk(
   'categories/fetchAll',
   async () => {
-    console.log('categories/fetchAll')
-    return categoriesApi.getAll()
+    const res = await axios.get<Category[]>('/api/categories')
+    console.log('categories/fetchAll', res.data)
+    return res.data ?? []
   }
 )
 
@@ -49,7 +50,7 @@ const categoriesSlice = createSlice({
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        categoriesAdapter.upsertMany(state, action.payload)
+        categoriesAdapter.upsertMany(state, action.payload ?? [])
       })
       .addCase(fetchCategories.rejected, (state, action) => {
         state.status = 'failed'

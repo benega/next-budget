@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useAppSelector } from '../../app/hooks'
 import {
   getCategoriesError,
@@ -10,8 +11,13 @@ export const CategoriesTable = () => {
   const status = useAppSelector(getCategoriesStatus)
   const error = useAppSelector(getCategoriesError)
   const categoriesIds = useAppSelector(selectCategoriesIds)
+  const [isLoading, setIsLoading] = useState(true)
 
-  if (status === 'loading') return <p>Loading...</p>
+  useEffect(() => {
+    setIsLoading(status === 'loading')
+  }, [status])
+
+  if (isLoading) return <p>Loading...</p>
   if (status === 'failed') return <p>{error}</p>
 
   return (
