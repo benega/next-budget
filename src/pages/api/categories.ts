@@ -6,6 +6,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Category[]>
 ) {
-  const categories = await prisma.category.findMany()
+  const categories = await prisma.category.findMany({
+    where: {
+      parent: null,
+    },
+    include: {
+      subcategories: true,
+    },
+  })
   res.status(200).json(categories)
 }

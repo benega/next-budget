@@ -6,7 +6,8 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { Category } from '@prisma/client'
+import { Category } from '../../../common/models/category'
+
 import { ApiStatus } from '../../../common/types/api-status'
 import { RootState } from '../../app/store'
 
