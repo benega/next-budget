@@ -2,6 +2,7 @@ import {
   createAsyncThunk,
   createEntityAdapter,
   createSlice,
+  EntityState,
   nanoid,
   PayloadAction,
 } from '@reduxjs/toolkit'
@@ -33,6 +34,8 @@ export const fetchCategories = createAsyncThunk(
   }
 )
 
+const { selectById: getCategoryById } = categoriesAdapter.getSelectors()
+
 const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
@@ -41,7 +44,21 @@ const categoriesSlice = createSlice({
       categoriesAdapter.upsertOne(state, { ...action.payload, id: nanoid() })
     },
     categoryArchived(state, action: PayloadAction<Category>) {
-      categoriesAdapter.removeOne(state, action.payload.id)
+      const category = action.payload
+      if (!category.parentId) {
+        categoriesAdapter.removeOne(state, category.id)
+      } else {
+        const mainCategory = getCategoryById(state, category.parentId)
+        if (mainCategory)
+          categoriesAdapter.updateOne(state, {
+            id: mainCategory.id,
+            changes: {
+              subcategories: mainCategory.subcategories.filter(
+                c => c.id !== category.id
+              ),
+            },
+          })
+      }
     },
   },
   extraReducers(builder) {

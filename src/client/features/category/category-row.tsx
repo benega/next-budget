@@ -15,10 +15,10 @@ export const CategoryRow = ({ categoryId }: CategoryRowProps) => {
     selectCategoryById(state, categoryId)
   )
 
-  if (!category) return undefined
+  if (!category) return null
 
-  const handleArchive = (category: Category) => {
-    if (category) dispatch(categoryArchived(category))
+  const handleArchive = (selectedCategory: Category) => {
+    if (selectedCategory) dispatch(categoryArchived(selectedCategory))
   }
 
   const handleShowSubcategories = () => {

@@ -6,6 +6,10 @@ import { categoryAdded } from './categories-slice'
 const emptyCategory: Category = {
   id: '',
   name: '',
+  createdAt: new Date(),
+  parentId: null,
+  subcategories: [],
+  updatedAt: new Date(),
 }
 
 type Props = {}
