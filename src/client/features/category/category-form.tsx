@@ -10,6 +10,7 @@ const emptyCategory: Category = {
   parentId: null,
   subcategories: [],
   updatedAt: new Date(),
+  archived: false,
 }
 
 type Props = {}
