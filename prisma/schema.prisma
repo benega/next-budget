@@ -17,7 +17,8 @@ model Category {
   updatedAt   DateTime @updatedAt
   parentId    String?
   parent      Category? @relation("Subcategories", fields: [parentId], references: [id])
-  subcategories Category[] @relation("Subcategories")   
+  subcategories Category[] @relation("Subcategories") 
+  archived    Boolean @default(false)  
 }
 
 model User {

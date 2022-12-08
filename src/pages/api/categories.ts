@@ -1,18 +1,11 @@
 import { Category } from '@prisma/client'
-import type { NextApiRequest, NextApiResponse } from 'next'
-import prisma from '../../server/data/prisma'
+import type { NextApiResponse } from 'next'
+import { makeApi } from '../../server/app/api'
+import { fetchAll } from '../../server/features/categories'
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Category[]>
-) {
-  const categories = await prisma.category.findMany({
-    where: {
-      parent: null,
-    },
-    include: {
-      subcategories: true,
-    },
-  })
-  res.status(200).json(categories)
-}
+export default makeApi({
+  get: async (req, res: NextApiResponse<Category[]>) => {
+    const categories = await fetchAll()
+    res.status(200).json(categories)
+  },
+})
