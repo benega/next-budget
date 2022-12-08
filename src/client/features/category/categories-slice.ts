@@ -2,7 +2,6 @@ import {
   createAsyncThunk,
   createEntityAdapter,
   createSlice,
-  EntityState,
   nanoid,
   PayloadAction,
 } from '@reduxjs/toolkit'
@@ -34,6 +33,15 @@ export const fetchCategories = createAsyncThunk(
   }
 )
 
+export const archiveCategory = createAsyncThunk(
+  'categories/archive',
+  async (category: Category) => {
+    const res = await axios.delete<Category>(`/api/categories/${category.id}`)
+    console.log('categories/delete', res.data)
+    return res.data
+  }
+)
+
 const { selectById: getCategoryById } = categoriesAdapter.getSelectors()
 
 const categoriesSlice = createSlice({
@@ -43,23 +51,23 @@ const categoriesSlice = createSlice({
     categoryAdded(state, action: PayloadAction<Category>) {
       categoriesAdapter.upsertOne(state, { ...action.payload, id: nanoid() })
     },
-    categoryArchived(state, action: PayloadAction<Category>) {
-      const category = action.payload
-      if (!category.parentId) {
-        categoriesAdapter.removeOne(state, category.id)
-      } else {
-        const mainCategory = getCategoryById(state, category.parentId)
-        if (mainCategory)
-          categoriesAdapter.updateOne(state, {
-            id: mainCategory.id,
-            changes: {
-              subcategories: mainCategory.subcategories.filter(
-                c => c.id !== category.id
-              ),
-            },
-          })
-      }
-    },
+    // categoryArchived(state, action: PayloadAction<Category>) {
+    //   const category = action.payload
+    //   if (!category.parentId) {
+    //     categoriesAdapter.removeOne(state, category.id)
+    //   } else {
+    //     const mainCategory = getCategoryById(state, category.parentId)
+    //     if (mainCategory)
+    //       categoriesAdapter.updateOne(state, {
+    //         id: mainCategory.id,
+    //         changes: {
+    //           subcategories: mainCategory.subcategories.filter(
+    //             c => c.id !== category.id
+    //           ),
+    //         },
+    //       })
+    //   }
+    // },
   },
   extraReducers(builder) {
     builder
@@ -74,6 +82,24 @@ const categoriesSlice = createSlice({
         state.status = 'failed'
         state.error = action.error?.message
       })
+      .addCase(archiveCategory.fulfilled, (state, action) => {
+        const category = action.payload
+        console.log('')
+        if (!category.parentId) {
+          categoriesAdapter.removeOne(state, category.id)
+        } else {
+          const mainCategory = getCategoryById(state, category.parentId)
+          if (mainCategory)
+            categoriesAdapter.updateOne(state, {
+              id: mainCategory.id,
+              changes: {
+                subcategories: mainCategory.subcategories.filter(
+                  c => c.id !== category.id
+                ),
+              },
+            })
+        }
+      })
   },
 })
 
@@ -85,5 +111,5 @@ export const {
 export const getCategoriesStatus = (state: RootState) => state.categories.status
 export const getCategoriesError = (state: RootState) => state.categories.error
 
-export const { categoryAdded, categoryArchived } = categoriesSlice.actions
+export const { categoryAdded } = categoriesSlice.actions
 export default categoriesSlice.reducer

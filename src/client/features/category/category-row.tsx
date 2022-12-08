@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { MdOutlineArchive } from 'react-icons/md'
-import { TbSquarePlus, TbSquareMinus } from 'react-icons/tb'
+import { TbSquareMinus, TbSquarePlus } from 'react-icons/tb'
 import { Category } from '../../../common/models/category'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { categoryArchived, selectCategoryById } from './categories-slice'
+import { archiveCategory, selectCategoryById } from './categories-slice'
 
 type CategoryRowProps = {
   categoryId: string
@@ -18,7 +18,7 @@ export const CategoryRow = ({ categoryId }: CategoryRowProps) => {
   if (!category) return null
 
   const handleArchive = (selectedCategory: Category) => {
-    if (selectedCategory) dispatch(categoryArchived(selectedCategory))
+    if (selectedCategory) dispatch(archiveCategory(selectedCategory))
   }
 
   const handleShowSubcategories = () => {
