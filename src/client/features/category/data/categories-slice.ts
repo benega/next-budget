@@ -1,15 +1,12 @@
+import { RootState } from '@/client/data'
+import { ApiStatus, httpClient } from '@/client/lib'
+import { Category } from '@/common/models/category'
 import {
   createAsyncThunk,
   createEntityAdapter,
   createSlice,
-  nanoid,
   PayloadAction,
 } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { Category } from '../../../common/models/category'
-
-import { ApiStatus } from '../../../common/types/api-status'
-import { RootState } from '../../app/store'
 
 export type CommonEntityState = {
   status: ApiStatus
@@ -27,7 +24,7 @@ const initialState = categoriesAdapter.getInitialState<CommonEntityState>({
 export const fetchCategories = createAsyncThunk(
   'categories/fetchAll',
   async () => {
-    const res = await axios.get<Category[]>('/api/categories')
+    const res = await httpClient.get<Category[]>('/api/categories')
     console.log('categories/fetchAll', res.data)
     return res.data ?? []
   }
@@ -36,7 +33,9 @@ export const fetchCategories = createAsyncThunk(
 export const archiveCategory = createAsyncThunk(
   'categories/archive',
   async (category: Category) => {
-    const res = await axios.delete<Category>(`/api/categories/${category.id}`)
+    const res = await httpClient.delete<Category>(
+      `/api/categories/${category.id}`
+    )
     console.log('categories/delete', res.data)
     return res.data
   }
@@ -48,8 +47,9 @@ const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
   reducers: {
-    categoryAdded(state, action: PayloadAction<Category>) {
-      categoriesAdapter.upsertOne(state, { ...action.payload, id: nanoid() })
+    categoryAdded(state, action: PayloadAction<string>) {
+      console.log('categoryAdded', action.payload)
+      // categoriesAdapter.upsertOne(state, { ...action.payload, id: nanoid() })
     },
     // categoryArchived(state, action: PayloadAction<Category>) {
     //   const category = action.payload

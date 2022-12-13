@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { MdOutlineArchive } from 'react-icons/md'
 import { TbSquareMinus, TbSquarePlus } from 'react-icons/tb'
-import { Category } from '../../../common/models/category'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { archiveCategory, selectCategoryById } from './categories-slice'
+import { Category } from '../../../../common/models/category'
+import { useAppDispatch, useAppSelector } from '../../../data/store'
+import { archiveCategory, selectCategoryById } from '../data/categories-slice'
 
 type CategoryRowProps = {
   categoryId: string
@@ -69,10 +69,10 @@ const MainCategory = ({
 
   return (
     <tr className="border-b border-gray-200">
-      <td className="p-2 flex items-center">
+      <td className="flex items-center p-2">
         {hasSubcategories ? (
           <button
-            className="cursor-pointer mr-2"
+            className="mr-2 cursor-pointer"
             onClick={() => onShowSubcategoriesToggleClick()}
           >
             {showingSubcategories ? (

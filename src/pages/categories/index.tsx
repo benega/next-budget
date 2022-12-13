@@ -1,10 +1,10 @@
-import { CategoriesTable, CategoryForm } from '../../client/features/category'
+import { CategoriesTable, CategoryFormModal } from '@/client/features'
 
 export default function Categories() {
   return (
-    <main className="container mx-auto p-4 flex flex-col items-center h-screen">
-      <h1 className="text-2xl font-bold mb-4">Categories</h1>
-      <CategoryForm />
+    <main className="container flex flex-col items-center h-screen p-4 mx-auto">
+      <h1 className="mb-4 text-2xl font-bold">Categories</h1>
+      <CategoryFormModal />
       <CategoriesTable />
     </main>
   )

@@ -1,10 +1,9 @@
-import '../client/styles/globals.css'
 import type { AppProps } from 'next/app'
-import { Provider } from 'react-redux'
-import { store } from '../client/app/store'
-import { fetchCategories } from '../client/features/category/categories-slice'
-import React from 'react'
 import Head from 'next/head'
+import { Provider } from 'react-redux'
+import '../client/assets/globals.css'
+import { store } from '../client/data/store'
+import { fetchCategories } from '../client/features/category/data/categories-slice'
 
 store.dispatch(fetchCategories())
 

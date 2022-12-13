@@ -1,7 +1,7 @@
 import { Category } from '@prisma/client'
 import type { NextApiResponse } from 'next'
-import { makeApi } from '../../../server/app/api'
-import { fetchAll } from '../../../server/features/categories'
+import { makeApi } from '../../../server/lib/api'
+import { fetchAll } from '../../../server/features'
 
 export default makeApi({
   get: async (req, res: NextApiResponse<Category[]>) => {

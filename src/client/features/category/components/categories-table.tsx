@@ -1,10 +1,10 @@
+import { useAppSelector } from '@/client/data'
 import { useEffect, useState } from 'react'
-import { useAppSelector } from '../../app/hooks'
 import {
   getCategoriesError,
   getCategoriesStatus,
   selectCategoriesIds,
-} from './categories-slice'
+} from '../data/categories-slice'
 import { CategoryRow } from './category-row'
 
 export const CategoriesTable = () => {
@@ -21,7 +21,7 @@ export const CategoriesTable = () => {
   if (status === 'failed') return <p>{error}</p>
 
   return (
-    <div className="overflow-x-auto self-start bg-slate-100 w-full text-left">
+    <div className="self-start w-full overflow-x-auto text-left bg-slate-100">
       <table className="w-full">
         <thead className="text-sm uppercase bg-gray-50">
           <tr>

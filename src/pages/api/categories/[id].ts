@@ -1,7 +1,7 @@
 import type { NextApiResponse } from 'next'
 import { Category } from '../../../common/models/category'
-import { makeApi } from '../../../server/app/api'
-import { archive } from '../../../server/features/categories'
+import { makeApi } from '../../../server/lib/api'
+import { archive } from '../../../server/features'
 
 export default makeApi({
   delete: async (req, res: NextApiResponse<Category>) => {
