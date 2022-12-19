@@ -1,24 +1,20 @@
 import { useAppSelector } from '@/client/data'
-import { useEffect, useState } from 'react'
 import {
-  getCategoriesError,
-  getCategoriesStatus,
-  selectCategoriesIds,
-} from '../data/categories-slice'
+  selectCatagoryIds,
+  useGetCategoriesQuery,
+} from '../data/categories-slice-api'
 import { CategoryRow } from './category-row'
 
 export const CategoriesTable = () => {
-  const status = useAppSelector(getCategoriesStatus)
-  const error = useAppSelector(getCategoriesError)
-  const categoriesIds = useAppSelector(selectCategoriesIds)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    setIsLoading(status === 'loading')
-  }, [status])
+  const { isLoading, isError, error } = useGetCategoriesQuery()
+  const categoriesIds = useAppSelector(selectCatagoryIds)
 
   if (isLoading) return <p>Loading...</p>
-  if (status === 'failed') return <p>{error}</p>
+
+  if (isError) {
+    console.error('Error fetching categories', error)
+    return <p>Error fetching categories..</p>
+  }
 
   return (
     <div className="self-start w-full overflow-x-auto text-left bg-slate-100">
