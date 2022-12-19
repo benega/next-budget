@@ -1,11 +1,11 @@
-import { RootState } from '@/client/data'
-import { Category } from '@/common/models/category'
+import { RootState } from 'src/core/client/data'
+import { Category } from 'src/features/category/models/category'
 import {
   createEntityAdapter,
   createSelector,
   EntityState,
 } from '@reduxjs/toolkit'
-import { apiSlice } from '../../api/api-slice'
+import { apiSlice } from '../../../../core/client/data/api-slice'
 
 const categoriesAdapter = createEntityAdapter<Category>({
   sortComparer: (a, b) => a.name.localeCompare(b.name),

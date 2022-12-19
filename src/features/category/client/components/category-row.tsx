@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import { MdOutlineArchive } from 'react-icons/md'
 import { TbSquareMinus, TbSquarePlus } from 'react-icons/tb'
-import { Category } from '../../../../common/models/category'
-import { useAppDispatch, useAppSelector } from '../../../data/store'
+import { Category } from '../../models/category'
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../../core/client/data/store'
 import { archiveCategory, selectCategoryById } from '../data/categories-slice'
 
 type CategoryRowProps = {

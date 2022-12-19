@@ -1,8 +1,8 @@
-import { Modal, useModal } from '@/client/components'
-import { useAppDispatch } from '@/client/data'
+import { Modal, useModal } from 'src/core/client/components'
+import { useAppDispatch } from 'src/core/client/data'
 import React, { useState } from 'react'
 import { categoryAdded } from '../data/categories-slice'
-import { Category } from '../models'
+import { Category } from '../../models'
 
 const emptyCategory: Category = {
   id: '',

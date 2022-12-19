@@ -16,8 +16,8 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/client/*": ["src/client/*"],
-      "@/server/*": ["src/server/*"],
+      "@/client/*": ["src/core/client/*"],
+      "@/server/*": ["src/core/server/*"],
       "@/common/*": ["src/common/*"]
     }
   },

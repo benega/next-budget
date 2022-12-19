@@ -1,5 +1,5 @@
-import { Category } from '../../../../common/models/category'
-import prisma from '../../../lib/prisma'
+import { Category } from '../../models/category'
+import prisma from '../../../../core/server/lib/prisma'
 
 export const fetchAll = async () => {
   const categories = await prisma.category.findMany({

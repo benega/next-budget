@@ -1,6 +1,6 @@
-import { RootState } from '@/client/data'
-import { ApiStatus, httpClient } from '@/client/lib'
-import { Category } from '@/common/models/category'
+import { RootState } from 'src/core/client/data'
+import { ApiStatus, httpClient } from 'src/core/client/lib'
+import { Category } from 'src/features/category/models/category'
 import {
   createAsyncThunk,
   createEntityAdapter,

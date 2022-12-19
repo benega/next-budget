@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import { apiSlice } from '../features/api/api-slice'
-import categoriesReducer from '../features/category/data/categories-slice'
+import { apiSlice } from './api-slice'
+import categoriesReducer from '../../../features/category/client/data/categories-slice'
 
 export const store = configureStore({
   reducer: {
