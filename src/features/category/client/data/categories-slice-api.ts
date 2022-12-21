@@ -13,6 +13,10 @@ const categoriesAdapter = createEntityAdapter<Category>({
 
 const initialState = categoriesAdapter.getInitialState()
 
+export type ArchiveCategoryParams = {
+  id: string
+}
+
 export const categoriesApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
     getCategories: builder.query<EntityState<Category>, void>({
@@ -21,17 +25,26 @@ export const categoriesApiSlice = apiSlice.injectEndpoints({
         return categoriesAdapter.setAll(initialState, response)
       },
     }),
+    archive: builder.mutation<EntityState<Category>, ArchiveCategoryParams>({
+      query: params => ({
+        url: `/categories/${params.id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 })
 
-export const { useGetCategoriesQuery } = categoriesApiSlice
+export const { useGetCategoriesQuery, useArchiveMutation } = categoriesApiSlice
 
 const selectCategoriesData = createSelector(
   categoriesApiSlice.endpoints.getCategories.select(),
   result => result.data
 )
 
-export const { selectAll: selectAllCategories, selectIds: selectCatagoryIds } =
-  categoriesAdapter.getSelectors<RootState>(
-    state => selectCategoriesData(state) ?? initialState
-  )
+export const {
+  selectAll: selectAllCategories,
+  selectIds: selectCatagoryIds,
+  selectById: selectCategoryById,
+} = categoriesAdapter.getSelectors<RootState>(
+  state => selectCategoriesData(state) ?? initialState
+)

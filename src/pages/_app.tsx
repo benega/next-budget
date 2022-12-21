@@ -3,9 +3,6 @@ import Head from 'next/head'
 import { Provider } from 'react-redux'
 import '../core/client/assets/globals.css'
 import { store } from '../core/client/data/store'
-import { fetchCategories } from '../features/category/client/data/categories-slice'
-
-store.dispatch(fetchCategories())
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

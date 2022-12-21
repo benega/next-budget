@@ -6,7 +6,10 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../../../core/client/data/store'
-import { archiveCategory, selectCategoryById } from '../data/categories-slice'
+import {
+  selectCategoryById,
+  useArchiveMutation,
+} from '../data/categories-slice-api'
 
 type CategoryRowProps = {
   categoryId: string
@@ -17,11 +20,18 @@ export const CategoryRow = ({ categoryId }: CategoryRowProps) => {
   const category = useAppSelector(state =>
     selectCategoryById(state, categoryId)
   )
+  const [archiveCategory] = useArchiveMutation()
 
   if (!category) return null
 
-  const handleArchive = (selectedCategory: Category) => {
-    if (selectedCategory) dispatch(archiveCategory(selectedCategory))
+  const handleArchive = async (selectedCategory: Category) => {
+    if (!selectedCategory) return
+
+    try {
+      await archiveCategory({ id: category.id }).unwrap()
+    } catch (err) {
+      console.error('Failed to archive category', err)
+    }
   }
 
   const handleShowSubcategories = () => {
