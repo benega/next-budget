@@ -2,7 +2,7 @@ import { useAppSelector } from 'src/core/client/data'
 import {
   selectCatagoryIds,
   useGetCategoriesQuery,
-} from '../data/categories-slice-api'
+} from '../data/categories-slice'
 import { CategoryRow } from './category-row'
 
 export const CategoriesTable = () => {

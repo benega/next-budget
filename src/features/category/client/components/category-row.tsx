@@ -2,21 +2,17 @@ import { useState } from 'react'
 import { MdOutlineArchive } from 'react-icons/md'
 import { TbSquareMinus, TbSquarePlus } from 'react-icons/tb'
 import { Category } from '../../models/category'
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../../../core/client/data/store'
+import { useAppSelector } from '../../../../core/client/data/store'
 import {
   selectCategoryById,
   useArchiveMutation,
-} from '../data/categories-slice-api'
+} from '../data/categories-slice'
 
 type CategoryRowProps = {
   categoryId: string
 }
 export const CategoryRow = ({ categoryId }: CategoryRowProps) => {
   const [showSubcategories, setShowSubcategories] = useState(false)
-  const dispatch = useAppDispatch()
   const category = useAppSelector(state =>
     selectCategoryById(state, categoryId)
   )
@@ -28,7 +24,7 @@ export const CategoryRow = ({ categoryId }: CategoryRowProps) => {
     if (!selectedCategory) return
 
     try {
-      await archiveCategory({ id: category.id }).unwrap()
+      await archiveCategory(selectedCategory).unwrap()
     } catch (err) {
       console.error('Failed to archive category', err)
     }

@@ -28,8 +28,6 @@ export const makeApi = (
 
     const method = req.method?.toLowerCase() as Methods
 
-    console.log('api', method)
-
     if (!handler[method])
       return res.status(405).end(`Method ${req.method} Not Allowed`)
 

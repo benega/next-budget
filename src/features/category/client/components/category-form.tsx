@@ -1,7 +1,6 @@
+import React, { useState } from 'react'
 import { Modal, useModal } from 'src/core/client/components'
 import { useAppDispatch } from 'src/core/client/data'
-import React, { useState } from 'react'
-import { categoryAdded } from '../data/categories-slice'
 import { Category } from '../../models'
 
 const emptyCategory: Category = {
@@ -26,8 +25,7 @@ export const CategoryForm = ({ onSave, onCancel }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const result = await dispatch(categoryAdded(category.name))
-    console.log('handle submit', { category, result })
+    //TODO: Implement Add new category
     setCategory({ ...emptyCategory })
     onSave()
   }
