@@ -1,14 +1,14 @@
-import { makeApi } from '@/server/lib/api'
-import { Category } from '@prisma/client'
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { AddCategory, FullCategory } from 'src/features/category/models'
+import { makeApi } from '@/core/server/lib'
 import {
-  fetchAll,
+  AddCategory,
+  FullCategory,
   create,
-} from 'src/features/category/server/services/categories-service'
+  fetchAll,
+} from '@/features/category/server'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default makeApi({
-  get: async (req, res: NextApiResponse<Category[]>) => {
+  get: async (req, res: NextApiResponse<FullCategory[]>) => {
     const categories = await fetchAll()
     res.status(200).json(categories)
   },

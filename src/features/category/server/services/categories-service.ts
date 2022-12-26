@@ -1,5 +1,5 @@
-import { AddCategory, FullCategory } from '../../models/category'
-import prisma from '../../../../core/server/lib/prisma'
+import prisma from '@/core/server/lib/prisma'
+import { AddCategory, FullCategory } from '../../common'
 
 export const fetchAll = async () => {
   const categories = await prisma.category.findMany({
@@ -13,7 +13,7 @@ export const fetchAll = async () => {
       createdAt: 'asc',
     },
   })
-  return categories
+  return categories as FullCategory[]
 }
 
 export const archive = async (categoryId: string, archive = true) => {

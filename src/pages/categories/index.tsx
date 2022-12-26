@@ -1,4 +1,4 @@
-import { CategoriesTable, CategoryFormModal } from 'src/features'
+import { CategoriesTable, CategoryFormModal } from '@/features/category/client'
 
 export default function Categories() {
   return (

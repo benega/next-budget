@@ -1,5 +1,5 @@
+import { FullCategory } from '@/features/category/common'
 import { EntityState } from '@reduxjs/toolkit'
-import { FullCategory } from 'src/features/category/models'
 
 export const createTagsFromEntityState = <TTag extends string>(
   type: TTag,

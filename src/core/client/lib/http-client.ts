@@ -1,4 +1,4 @@
 import axios from 'axios'
 
 export const httpClient = axios
-export * from '@/client/data/api-status'
+export * from '@/core/client/data/api-status'

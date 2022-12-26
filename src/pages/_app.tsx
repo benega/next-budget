@@ -1,8 +1,8 @@
+import '@/core/client/assets/globals.css'
+import { store } from '@/core/client/data'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Provider } from 'react-redux'
-import '../core/client/assets/globals.css'
-import { store } from '../core/client/data/store'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

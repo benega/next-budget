@@ -1,18 +1,15 @@
 import {
+  RootState,
+  apiSlice,
+  createTags,
+  createTagsFromEntityState,
+} from '@/core/client/data'
+import { AddCategory, FullCategory } from '@/features/category/client'
+import {
   EntityState,
   createEntityAdapter,
   createSelector,
 } from '@reduxjs/toolkit'
-import {
-  RootState,
-  createTags,
-  createTagsFromEntityState,
-} from 'src/core/client/data'
-import {
-  AddCategory,
-  FullCategory,
-} from 'src/features/category/models/category'
-import { apiSlice } from '../../../../core/client/data/api-slice'
 
 const categoriesAdapter = createEntityAdapter<FullCategory>({
   //sortComparer: (a, b) => a.name.localeCompare(b.name),

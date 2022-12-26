@@ -1,4 +1,4 @@
-import { useAppSelector } from 'src/core/client/data'
+import { useAppSelector } from '@/core/client/data'
 import {
   selectCatagoryIds,
   useGetCategoriesQuery,

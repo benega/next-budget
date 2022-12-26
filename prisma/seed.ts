@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-import { FullCategory } from '../src/features/category/models/category'
 
 const prisma = new PrismaClient()
 

@@ -1,8 +1,8 @@
+import { useAppSelector } from '@/core/client/data'
 import { useState } from 'react'
 import { MdOutlineArchive } from 'react-icons/md'
 import { TbSquareMinus, TbSquarePlus } from 'react-icons/tb'
-import { FullCategory } from '../../models/category'
-import { useAppSelector } from '../../../../core/client/data/store'
+import { FullCategory } from '../../common'
 import {
   selectCategoryById,
   useArchiveMutation,

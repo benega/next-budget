@@ -16,9 +16,7 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/client/*": ["src/core/client/*"],
-      "@/server/*": ["src/core/server/*"],
-      "@/common/*": ["src/common/*"]
+      "@/*": ["src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

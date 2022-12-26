@@ -1,7 +1,6 @@
+import { Modal, useModal } from '@/core/client/components'
 import React, { useState } from 'react'
-import { Modal, useModal } from 'src/core/client/components'
-import { useAppDispatch } from 'src/core/client/data'
-import { FullCategory } from '../../models'
+import { FullCategory } from '../../common'
 import { useAddNewCategoryMutation } from '../data/categories-slice'
 
 const emptyCategory: FullCategory = {
