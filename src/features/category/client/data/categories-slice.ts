@@ -8,26 +8,29 @@ import {
   createTags,
   createTagsFromEntityState,
 } from 'src/core/client/data'
-import { Category } from 'src/features/category/models/category'
+import {
+  AddCategory,
+  FullCategory,
+} from 'src/features/category/models/category'
 import { apiSlice } from '../../../../core/client/data/api-slice'
 
-const categoriesAdapter = createEntityAdapter<Category>({
-  sortComparer: (a, b) => a.name.localeCompare(b.name),
+const categoriesAdapter = createEntityAdapter<FullCategory>({
+  //sortComparer: (a, b) => a.name.localeCompare(b.name),
 })
 
 const initialState = categoriesAdapter.getInitialState()
 
 export const categoriesApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getCategories: builder.query<EntityState<Category>, void>({
+    getCategories: builder.query<EntityState<FullCategory>, void>({
       query: () => '/categories',
-      transformResponse: (response: Category[]) => {
+      transformResponse: (response: FullCategory[]) => {
         return categoriesAdapter.setAll(initialState, response)
       },
       providesTags: result =>
         createTagsFromEntityState('Category', 'LIST', result),
     }),
-    archive: builder.mutation<EntityState<Category>, Category>({
+    archive: builder.mutation<EntityState<FullCategory>, FullCategory>({
       query: category => ({
         url: `/categories/${category.id}`,
         method: 'DELETE',
@@ -37,10 +40,24 @@ export const categoriesApiSlice = apiSlice.injectEndpoints({
           ? createTags('Category', category.id, category.parentId)
           : createTags('Category', category.id),
     }),
+    addNewCategory: builder.mutation<void, AddCategory>({
+      query: addCategory => ({
+        url: '/categories',
+        method: 'POST',
+        body: {
+          ...addCategory,
+        },
+      }),
+      invalidatesTags: [{ type: 'Category', id: 'LIST' }],
+    }),
   }),
 })
 
-export const { useGetCategoriesQuery, useArchiveMutation } = categoriesApiSlice
+export const {
+  useGetCategoriesQuery,
+  useArchiveMutation,
+  useAddNewCategoryMutation,
+} = categoriesApiSlice
 
 const selectCategoriesData = createSelector(
   categoriesApiSlice.endpoints.getCategories.select(),

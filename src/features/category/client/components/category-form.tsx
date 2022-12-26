@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Modal, useModal } from 'src/core/client/components'
 import { useAppDispatch } from 'src/core/client/data'
-import { Category } from '../../models'
+import { FullCategory } from '../../models'
+import { useAddNewCategoryMutation } from '../data/categories-slice'
 
-const emptyCategory: Category = {
+const emptyCategory: FullCategory = {
   id: '',
   name: '',
   createdAt: new Date(),
@@ -19,13 +20,16 @@ type Props = {
 }
 
 export const CategoryForm = ({ onSave, onCancel }: Props) => {
-  const dispatch = useAppDispatch()
+  const [addCategory] = useAddNewCategoryMutation()
 
-  const [category, setCategory] = useState<Category>(emptyCategory)
+  const [category, setCategory] = useState<FullCategory>(emptyCategory)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    //TODO: Implement Add new category
+    addCategory({
+      name: category.name,
+      parentId: null,
+    })
     setCategory({ ...emptyCategory })
     onSave()
   }

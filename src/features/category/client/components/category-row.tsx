@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { MdOutlineArchive } from 'react-icons/md'
 import { TbSquareMinus, TbSquarePlus } from 'react-icons/tb'
-import { Category } from '../../models/category'
+import { FullCategory } from '../../models/category'
 import { useAppSelector } from '../../../../core/client/data/store'
 import {
   selectCategoryById,
@@ -20,7 +20,7 @@ export const CategoryRow = ({ categoryId }: CategoryRowProps) => {
 
   if (!category) return null
 
-  const handleArchive = async (selectedCategory: Category) => {
+  const handleArchive = async (selectedCategory: FullCategory) => {
     if (!selectedCategory) return
 
     try {
@@ -63,10 +63,10 @@ export const CategoryRow = ({ categoryId }: CategoryRowProps) => {
 }
 
 type MainCategory = {
-  category: Category
+  category: FullCategory
   showingSubcategories: boolean
   onShowSubcategoriesToggleClick: () => void
-  onArchiveCategoryClick: (category: Category) => void
+  onArchiveCategoryClick: (category: FullCategory) => void
 }
 const MainCategory = ({
   category,

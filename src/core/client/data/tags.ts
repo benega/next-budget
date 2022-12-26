@@ -1,10 +1,10 @@
 import { EntityState } from '@reduxjs/toolkit'
-import { Category } from 'src/features/category/models'
+import { FullCategory } from 'src/features/category/models'
 
 export const createTagsFromEntityState = <TTag extends string>(
   type: TTag,
   mainId?: string | null,
-  result?: EntityState<Category>
+  result?: EntityState<FullCategory>
 ): { type: TTag; id: string }[] => {
   return [
     ...(mainId ? [{ type, id: mainId }] : []),
