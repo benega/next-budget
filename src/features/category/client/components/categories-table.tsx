@@ -1,3 +1,4 @@
+import { Loading } from '@/core/client/components'
 import { useAppSelector } from '@/core/client/data'
 import {
   selectCatagoryIds,
@@ -9,7 +10,7 @@ export const CategoriesTable = () => {
   const { isLoading, isError, error } = useGetCategoriesQuery()
   const categoriesIds = useAppSelector(selectCatagoryIds)
 
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading) return <Loading />
 
   if (isError) {
     console.error('Error fetching categories', error)
