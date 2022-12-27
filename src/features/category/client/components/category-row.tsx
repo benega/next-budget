@@ -1,24 +1,22 @@
+import {
+  ArchiveIcon,
+  SquareMinusIcon,
+  SquarePlusIcon,
+} from '@/core/client/components'
 import { useAppSelector } from '@/core/client/data'
 import { useState } from 'react'
-import { MdOutlineArchive } from 'react-icons/md'
-import { TbSquareMinus, TbSquarePlus } from 'react-icons/tb'
 import { FullCategory } from '../../common'
 import {
   selectCategoryById,
   useArchiveMutation,
 } from '../data/categories-slice'
 
-type CategoryRowProps = {
-  categoryId: string
-}
-export const CategoryRow = ({ categoryId }: CategoryRowProps) => {
+const useCategoryRow = (categoryId: string) => {
   const [showSubcategories, setShowSubcategories] = useState(false)
   const category = useAppSelector(state =>
     selectCategoryById(state, categoryId)
   )
   const [archiveCategory] = useArchiveMutation()
-
-  if (!category) return null
 
   const handleArchive = async (selectedCategory: FullCategory) => {
     if (!selectedCategory) return
@@ -30,17 +28,34 @@ export const CategoryRow = ({ categoryId }: CategoryRowProps) => {
     }
   }
 
-  const handleShowSubcategories = () => {
-    setShowSubcategories(show => !show)
+  return {
+    showSubcategories,
+    toggleShowSubcategories: () => setShowSubcategories(show => !show),
+    category,
+    archiveCategory: handleArchive,
   }
+}
+
+type CategoryRowProps = {
+  categoryId: string
+}
+export const CategoryRow = ({ categoryId }: CategoryRowProps) => {
+  const {
+    showSubcategories,
+    toggleShowSubcategories,
+    category,
+    archiveCategory,
+  } = useCategoryRow(categoryId)
+
+  if (!category) return null
 
   return (
     <>
       <MainCategory
         category={category}
         showingSubcategories={showSubcategories}
-        onShowSubcategoriesToggleClick={handleShowSubcategories}
-        onArchiveCategoryClick={handleArchive}
+        onShowSubcategoriesToggleClick={toggleShowSubcategories}
+        onArchiveCategoryClick={archiveCategory}
       />
       {showSubcategories &&
         category?.subcategories.map(c => (
@@ -51,9 +66,9 @@ export const CategoryRow = ({ categoryId }: CategoryRowProps) => {
             <td className="p-2">
               <button
                 className="cursor-pointer"
-                onClick={() => handleArchive(c)}
+                onClick={() => archiveCategory(c)}
               >
-                <MdOutlineArchive color="gray" size={24} />
+                <ArchiveIcon color="gray" size={24} />
               </button>
             </td>
           </tr>
@@ -85,9 +100,9 @@ const MainCategory = ({
             onClick={() => onShowSubcategoriesToggleClick()}
           >
             {showingSubcategories ? (
-              <TbSquareMinus color="gray" size={24} />
+              <SquareMinusIcon color="gray" size={24} />
             ) : (
-              <TbSquarePlus color="gray" size={24} />
+              <SquarePlusIcon color="gray" size={24} />
             )}
           </button>
         ) : (
@@ -100,7 +115,7 @@ const MainCategory = ({
           className="cursor-pointer"
           onClick={() => onArchiveCategoryClick(category!)}
         >
-          <MdOutlineArchive color="gray" size={24} />
+          <ArchiveIcon color="gray" size={24} />
         </button>
       </td>
     </tr>
