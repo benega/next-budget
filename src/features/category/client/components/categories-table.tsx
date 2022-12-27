@@ -3,7 +3,7 @@ import {
   selectCatagoryIds,
   useGetCategoriesQuery,
 } from '../data/categories-slice'
-import { CategoryRow } from './category-row'
+import { CategoryRow } from './category-row/category-row'
 
 export const CategoriesTable = () => {
   const { isLoading, isError, error } = useGetCategoriesQuery()

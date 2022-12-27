@@ -29,31 +29,40 @@ async function main() {
   //     },
   //   })
 
-  let cat1 = await prisma.category.findFirst({
+  // let cat1 = await prisma.category.findFirst({
+  //   where: {
+  //     name: 'Category 1',
+  //   },
+  // })
+
+  // if (cat1) {
+  //   cat1 = await prisma.category.update({
+  //     where: {
+  //       id: cat1.id,
+  //     },
+  //     data: {
+  //       subcategories: {
+  //         create: {
+  //           name: 'Category 1.4',
+  //         },
+  //       },
+  //     },
+  //     include: {
+  //       subcategories: true,
+  //     },
+  //   })
+
+  //   console.log(JSON.stringify(cat1, null, 4))
+  // }
+
+  await prisma.category.updateMany({
     where: {
-      name: 'Category 1',
+      archived: true,
+    },
+    data: {
+      archived: false,
     },
   })
-
-  if (cat1) {
-    cat1 = await prisma.category.update({
-      where: {
-        id: cat1.id,
-      },
-      data: {
-        subcategories: {
-          create: {
-            name: 'Category 1.4',
-          },
-        },
-      },
-      include: {
-        subcategories: true,
-      },
-    })
-
-    console.log(JSON.stringify(cat1, null, 4))
-  }
 
   //   await prisma.category.update({
   //     where: {
