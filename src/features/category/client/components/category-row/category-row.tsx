@@ -1,5 +1,6 @@
 import {
   ArchiveIcon,
+  EditIcon,
   SquareMinusIcon,
   SquarePlusIcon,
 } from '@/core/client/components'
@@ -56,6 +57,10 @@ const InternalCategoryRow = ({
 }: InternalCategoryRowProps) => {
   const hasSubcategories = (category?.subcategories?.length ?? 0) > 0
 
+  const handleEditCategory = (category: FullCategory) => {
+    console.log('edit category')
+  }
+
   return (
     <tr className="border-b border-gray-200">
       <td className="flex items-center p-2">
@@ -80,6 +85,11 @@ const InternalCategoryRow = ({
         <IconButton
           onClick={() => onArchiveCategoryClick(category!)}
           icon={<ArchiveIcon color="gray" size={24} />}
+        />
+        <IconButton
+          className="ml-2"
+          onClick={() => handleEditCategory(category!)}
+          icon={<EditIcon color="gray" size={24} />}
         />
       </td>
     </tr>
