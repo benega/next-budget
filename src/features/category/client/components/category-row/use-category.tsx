@@ -1,12 +1,8 @@
-import { useAppSelector } from '@/core/client/data'
 import { useState } from 'react'
-import { FullCategory, selectCategoryById, useArchiveMutation } from '../..'
+import { FullCategory, useArchiveMutation } from '../..'
 
-export const useCategoryRow = (categoryId: string) => {
+export const useCategoryRow = (category: FullCategory) => {
   const [showSubcategories, setShowSubcategories] = useState(false)
-  const category = useAppSelector(state =>
-    selectCategoryById(state, categoryId)
-  )
   const [archiveCategory] = useArchiveMutation()
 
   const handleArchive = async (selectedCategory: FullCategory) => {
@@ -20,9 +16,9 @@ export const useCategoryRow = (categoryId: string) => {
   }
 
   return {
+    hasSubcategories: (category?.subcategories?.length ?? 0) > 0,
     showSubcategories,
     toggleShowSubcategories: () => setShowSubcategories(show => !show),
-    category,
     archiveCategory: handleArchive,
   }
 }

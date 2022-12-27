@@ -3,7 +3,7 @@ import {
   selectCatagoryIds,
   useGetCategoriesQuery,
 } from '../data/categories-slice'
-import { CategoryRow } from './category-row/category-row'
+import { CategoryRow } from './category-row'
 
 export const CategoriesTable = () => {
   const { isLoading, isError, error } = useGetCategoriesQuery()
@@ -27,6 +27,7 @@ export const CategoriesTable = () => {
         </thead>
         <tbody className="bg-white">
           {categoriesIds.map(c => (
+            // <CategoryRow key={c.toString()} categoryId={c.toString()} />
             <CategoryRow key={c.toString()} categoryId={c.toString()} />
           ))}
         </tbody>
