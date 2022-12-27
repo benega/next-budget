@@ -27,7 +27,6 @@ export const CategoriesTable = () => {
         </thead>
         <tbody className="bg-white">
           {categoriesIds.map(c => (
-            // <CategoryRow key={c.toString()} categoryId={c.toString()} />
             <CategoryRow key={c.toString()} categoryId={c.toString()} />
           ))}
         </tbody>

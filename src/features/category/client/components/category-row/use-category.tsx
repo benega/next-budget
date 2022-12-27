@@ -3,13 +3,11 @@ import { FullCategory, useArchiveMutation } from '../..'
 
 export const useCategoryRow = (category: FullCategory) => {
   const [showSubcategories, setShowSubcategories] = useState(false)
-  const [archiveCategory] = useArchiveMutation()
+  const [archiveCategory, { isLoading }] = useArchiveMutation()
 
-  const handleArchive = async (selectedCategory: FullCategory) => {
-    if (!selectedCategory) return
-
+  const handleArchive = async () => {
     try {
-      await archiveCategory(selectedCategory).unwrap()
+      await archiveCategory(category).unwrap()
     } catch (err) {
       console.error('Failed to archive category', err)
     }
@@ -20,5 +18,6 @@ export const useCategoryRow = (category: FullCategory) => {
     showSubcategories,
     toggleShowSubcategories: () => setShowSubcategories(show => !show),
     archiveCategory: handleArchive,
+    isLoading: isLoading,
   }
 }

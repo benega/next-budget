@@ -1,10 +1,11 @@
 import {
   ArchiveIcon,
   EditIcon,
+  IconButton,
+  Loading,
   SquareMinusIcon,
   SquarePlusIcon,
 } from '@/core/client/components'
-import { IconButton } from '@/core/client/components/ui/icon-button'
 import { useAppSelector } from '@/core/client/data'
 import { FullCategory, selectCategoryById } from '@/features/category/client'
 import { useCategoryRow } from './use-category'
@@ -30,6 +31,7 @@ const InternalCategoryRow = ({ category }: InternalCategoryRowProps) => {
     showSubcategories,
     toggleShowSubcategories,
     archiveCategory,
+    isLoading,
   } = useCategoryRow(category)
 
   const handleEditCategory = (category: FullCategory) => {
@@ -40,6 +42,7 @@ const InternalCategoryRow = ({ category }: InternalCategoryRowProps) => {
     <>
       <tr className="border-b border-gray-200">
         <td className="flex items-center p-2">
+          {isLoading && <Loading />}
           {hasSubcategories ? (
             <IconButton
               className="mr-2"
@@ -59,7 +62,7 @@ const InternalCategoryRow = ({ category }: InternalCategoryRowProps) => {
         </td>
         <td className="p-2">
           <IconButton
-            onClick={() => archiveCategory(category!)}
+            onClick={archiveCategory}
             icon={<ArchiveIcon color="gray" size={24} />}
           />
           <IconButton
