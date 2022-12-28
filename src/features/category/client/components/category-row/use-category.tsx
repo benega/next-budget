@@ -1,7 +1,11 @@
 import { useState } from 'react'
-import { CategoryEditableData, FullCategory, useArchiveMutation } from '../..'
+import {
+  CategoryEditableData,
+  CategoryFullModel,
+  useArchiveMutation,
+} from '../..'
 
-export const useCategoryRow = (category: FullCategory) => {
+export const useCategoryRow = (category: CategoryFullModel) => {
   const [showSubcategories, setShowSubcategories] = useState(false)
   const [archiveCategory, { isLoading }] = useArchiveMutation()
 

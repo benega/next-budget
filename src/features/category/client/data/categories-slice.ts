@@ -5,61 +5,61 @@ import {
   createTagsFromEntityState,
 } from '@/core/client/data'
 import {
-  Category,
-  CategoryEditableData,
-  FullCategory,
+  AddCategory,
+  ArchiveCategory,
+  CategoryFullModel,
+  UpdateCategory,
 } from '@/features/category/client'
 import {
   EntityState,
   createEntityAdapter,
   createSelector,
 } from '@reduxjs/toolkit'
+import { FetchCategories } from '../../common/usecases/fetch-categories'
 
-const categoriesAdapter = createEntityAdapter<FullCategory>({
-  //sortComparer: (a, b) => a.name.localeCompare(b.name),
-})
-
+const categoriesAdapter = createEntityAdapter<CategoryFullModel>()
 const initialState = categoriesAdapter.getInitialState()
 
 export const categoriesApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getCategories: builder.query<EntityState<FullCategory>, void>({
+    getCategories: builder.query<EntityState<FetchCategories.Model>, void>({
       query: () => '/categories',
-      transformResponse: (response: FullCategory[]) => {
+      transformResponse: (response: CategoryFullModel[]) => {
         return categoriesAdapter.setAll(initialState, response)
       },
       providesTags: result =>
         createTagsFromEntityState('Category', 'LIST', result),
     }),
-    archive: builder.mutation<EntityState<FullCategory>, FullCategory>({
-      query: category => ({
-        url: `/categories/${category.id}`,
+    archive: builder.mutation<
+      EntityState<ArchiveCategory.Model>,
+      ArchiveCategory.Params
+    >({
+      query: params => ({
+        url: `/categories/${params.id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, category) =>
-        category.parentId
-          ? createTags('Category', category.id, category.parentId)
-          : createTags('Category', category.id),
+      invalidatesTags: (result, error, params) =>
+        createTags('Category', params.id, params.parentId),
     }),
-    addNewCategory: builder.mutation<void, CategoryEditableData>({
-      query: addCategory => ({
+    addCategory: builder.mutation<void, AddCategory.Params>({
+      query: params => ({
         url: '/categories',
         method: 'POST',
         body: {
-          ...addCategory,
+          ...params,
         },
       }),
       invalidatesTags: [{ type: 'Category', id: 'LIST' }],
     }),
-    updateCategory: builder.mutation<Category, CategoryEditableData>({
-      query: category => ({
+    updateCategory: builder.mutation<void, UpdateCategory.Params>({
+      query: params => ({
         url: '/categories',
         method: 'PATCH',
         body: {
-          ...category,
+          ...params,
         },
       }),
-      invalidatesTags: [{ type: 'Category', id: 'LIST' }],
+      invalidatesTags: createTags('Category', 'LIST'),
     }),
   }),
 })
@@ -67,7 +67,7 @@ export const categoriesApiSlice = apiSlice.injectEndpoints({
 export const {
   useGetCategoriesQuery,
   useArchiveMutation,
-  useAddNewCategoryMutation,
+  useAddCategoryMutation,
 } = categoriesApiSlice
 
 const selectCategoriesData = createSelector(

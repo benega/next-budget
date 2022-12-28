@@ -10,10 +10,10 @@ import {
 } from '@/core/client/components'
 import { useAppSelector } from '@/core/client/data'
 import {
-  Category,
   CategoryEditableData,
   CategoryForm,
-  FullCategory,
+  CategoryFullModel,
+  CategoryModel,
   selectCategoryById,
 } from '@/features/category/client'
 import { useCategoryRow } from './use-category'
@@ -31,7 +31,7 @@ export const CategoryRow = ({ categoryId }: CategoryRowProps) => {
 }
 
 type InternalCategoryRowProps = {
-  category: FullCategory
+  category: CategoryFullModel
 }
 const InternalCategoryRow = ({ category }: InternalCategoryRowProps) => {
   const {
@@ -85,7 +85,7 @@ export const EditCategoryButton = ({
   category,
   onUpdate,
 }: {
-  category: Category
+  category: CategoryModel
   onUpdate: (id: string, category: CategoryEditableData) => void
 }) => {
   const { modalProps, toggleModal } = useModal()

@@ -2,7 +2,7 @@ import { Modal, useModal } from '@/core/client/components'
 import { Category } from '@prisma/client'
 import React, { useState } from 'react'
 import { CategoryEditableData } from '../../common'
-import { useAddNewCategoryMutation } from '../data/categories-slice'
+import { useAddCategoryMutation } from '../data/categories-slice'
 
 type CategoryFormProps =
   | {
@@ -63,10 +63,10 @@ export const CategoryForm = (props: CategoryFormProps) => {
 
 export const CreateCategoryFormModal = () => {
   const { modalProps, toggleModal } = useModal()
-  const [addNewCategory] = useAddNewCategoryMutation()
+  const [addCategory] = useAddCategoryMutation()
   const handleCreate = async (data: CategoryEditableData) => {
     try {
-      await addNewCategory(data).unwrap()
+      await addCategory(data).unwrap()
       toggleModal()
     } catch (e) {
       console.error('Error creating new category', { data, e })
