@@ -14,15 +14,7 @@ export type ApiHandler = {
   [key in Methods]?: Endpoint
 }
 
-export type ApiMiddleware = (
-  req: CustomNextApiRequest,
-  res: NextApiResponse
-) => Promise<boolean>
-
-export const makeApi = (
-  handler: ApiHandler,
-  ...middlewares: ApiMiddleware[]
-) => {
+export const makeApi = (handler: ApiHandler) => {
   return async (req: CustomNextApiRequest, res: NextApiResponse) => {
     req.custom = req.custom || {}
 
@@ -31,10 +23,6 @@ export const makeApi = (
     if (!handler[method])
       return res.status(405).end(`Method ${req.method} Not Allowed`)
 
-    for (let i = 0; i < middlewares.length; i++) {
-      if (!(await middlewares[i](req, res))) return
-    }
-
-    handler[method]!(req, res)
+    return handler[method]!(req, res)
   }
 }
