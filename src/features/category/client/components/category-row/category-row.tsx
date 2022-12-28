@@ -3,11 +3,19 @@ import {
   EditIcon,
   IconButton,
   Loading,
+  Modal,
   SquareMinusIcon,
   SquarePlusIcon,
+  useModal,
 } from '@/core/client/components'
 import { useAppSelector } from '@/core/client/data'
-import { FullCategory, selectCategoryById } from '@/features/category/client'
+import {
+  Category,
+  CategoryEditableData,
+  CategoryForm,
+  FullCategory,
+  selectCategoryById,
+} from '@/features/category/client'
 import { useCategoryRow } from './use-category'
 
 type CategoryRowProps = {
@@ -31,12 +39,9 @@ const InternalCategoryRow = ({ category }: InternalCategoryRowProps) => {
     showSubcategories,
     toggleShowSubcategories,
     archiveCategory,
+    updateCategory,
     isLoading,
   } = useCategoryRow(category)
-
-  const handleEditCategory = (category: FullCategory) => {
-    console.log('edit category', category.name)
-  }
 
   return (
     <>
@@ -65,17 +70,44 @@ const InternalCategoryRow = ({ category }: InternalCategoryRowProps) => {
             onClick={archiveCategory}
             icon={<ArchiveIcon color="gray" size={24} />}
           />
-          <IconButton
-            className="ml-2"
-            onClick={() => handleEditCategory(category!)}
-            icon={<EditIcon color="gray" size={24} />}
-          />
+          <EditCategoryButton category={category} onUpdate={updateCategory} />
         </td>
       </tr>
       {showSubcategories &&
         category?.subcategories.map(c => (
           <InternalCategoryRow key={c.id} category={c} />
         ))}
+    </>
+  )
+}
+
+export const EditCategoryButton = ({
+  category,
+  onUpdate,
+}: {
+  category: Category
+  onUpdate: (id: string, category: CategoryEditableData) => void
+}) => {
+  const { modalProps, toggleModal } = useModal()
+
+  return (
+    <>
+      <IconButton
+        className="ml-2"
+        onClick={() => toggleModal()}
+        icon={<EditIcon color="gray" size={24} />}
+      />
+      <Modal {...modalProps}>
+        <CategoryForm
+          mode="edit"
+          category={category}
+          onUpdate={(id, category) => {
+            onUpdate(id, category)
+            toggleModal()
+          }}
+          onCancel={toggleModal}
+        />
+      </Modal>
     </>
   )
 }

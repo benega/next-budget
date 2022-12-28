@@ -1,41 +1,39 @@
 import { Modal, useModal } from '@/core/client/components'
+import { Category } from '@prisma/client'
 import React, { useState } from 'react'
-import { FullCategory } from '../../common'
+import { CategoryEditableData } from '../../common'
 import { useAddNewCategoryMutation } from '../data/categories-slice'
 
-const emptyCategory: FullCategory = {
-  id: '',
-  name: '',
-  createdAt: new Date(),
-  parentId: null,
-  subcategories: [],
-  updatedAt: new Date(),
-  archived: false,
-}
+type CategoryFormProps =
+  | {
+      mode: 'create'
+      onCreate: (category: CategoryEditableData) => void
+      onCancel: () => void
+    }
+  | {
+      mode: 'edit'
+      category: Category
+      onUpdate: (id: string, category: CategoryEditableData) => void
+      onCancel: () => void
+    }
 
-type Props = {
-  onSave: () => void
-  onCancel: () => void
-}
-
-export const CategoryForm = ({ onSave, onCancel }: Props) => {
-  const [addCategory] = useAddNewCategoryMutation()
-
-  const [category, setCategory] = useState<FullCategory>(emptyCategory)
+export const CategoryForm = (props: CategoryFormProps) => {
+  const [data, setData] = useState<CategoryEditableData>(
+    props.mode === 'edit' ? { name: props.category.name } : { name: '' }
+  )
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    addCategory({
-      name: category.name,
-      parentId: null,
-    })
-    setCategory({ ...emptyCategory })
-    onSave()
+    if (props.mode === 'create') {
+      props.onCreate(data)
+    } else {
+      props.onUpdate(props.category.id, data)
+    }
   }
 
   const handleChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCategory(category => ({
-      ...category,
+    setData(data => ({
+      ...data,
       [e.target.name]: e.target.value,
     }))
   }
@@ -50,11 +48,11 @@ export const CategoryForm = ({ onSave, onCancel }: Props) => {
         name="name"
         placeholder="Category name"
         className="w-full p-2 border rounded-md"
-        value={category.name}
+        value={data?.name ?? ''}
         onChange={handleChanges}
       />
       <div className="flex justify-end w-full mt-8">
-        <button className="mr-4" type="button" onClick={onCancel}>
+        <button className="mr-4" type="button" onClick={props.onCancel}>
           Cancel
         </button>
         <button className="">Save</button>
@@ -63,8 +61,17 @@ export const CategoryForm = ({ onSave, onCancel }: Props) => {
   )
 }
 
-export const CategoryFormModal = () => {
+export const CreateCategoryFormModal = () => {
   const { modalProps, toggleModal } = useModal()
+  const [addNewCategory] = useAddNewCategoryMutation()
+  const handleCreate = async (data: CategoryEditableData) => {
+    try {
+      await addNewCategory(data).unwrap()
+      toggleModal()
+    } catch (e) {
+      console.error('Error creating new category', { data, e })
+    }
+  }
 
   return (
     <>
@@ -72,7 +79,11 @@ export const CategoryFormModal = () => {
         New Category
       </button>
       <Modal {...modalProps}>
-        <CategoryForm onSave={toggleModal} onCancel={toggleModal} />
+        <CategoryForm
+          mode="create"
+          onCreate={handleCreate}
+          onCancel={toggleModal}
+        />
       </Modal>
     </>
   )

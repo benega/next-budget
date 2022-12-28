@@ -10,8 +10,6 @@ export const CategoriesTable = () => {
   const { isLoading, isError, error } = useGetCategoriesQuery()
   const categoriesIds = useAppSelector(selectCatagoryIds)
 
-  if (isLoading) return <Loading />
-
   if (isError) {
     console.error('Error fetching categories', error)
     return <p>Error fetching categories..</p>
@@ -19,6 +17,7 @@ export const CategoriesTable = () => {
 
   return (
     <div className="self-start w-full overflow-x-auto text-left bg-slate-100">
+      {isLoading && <Loading />}
       <table className="w-full">
         <thead className="text-sm uppercase bg-gray-50">
           <tr>
@@ -27,7 +26,7 @@ export const CategoriesTable = () => {
           </tr>
         </thead>
         <tbody className="bg-white">
-          {categoriesIds.map(c => (
+          {categoriesIds?.map(c => (
             <CategoryRow key={c.toString()} categoryId={c.toString()} />
           ))}
         </tbody>

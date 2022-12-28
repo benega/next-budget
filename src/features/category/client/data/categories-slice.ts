@@ -4,7 +4,11 @@ import {
   createTags,
   createTagsFromEntityState,
 } from '@/core/client/data'
-import { AddCategory, FullCategory } from '@/features/category/client'
+import {
+  Category,
+  CategoryEditableData,
+  FullCategory,
+} from '@/features/category/client'
 import {
   EntityState,
   createEntityAdapter,
@@ -37,12 +41,22 @@ export const categoriesApiSlice = apiSlice.injectEndpoints({
           ? createTags('Category', category.id, category.parentId)
           : createTags('Category', category.id),
     }),
-    addNewCategory: builder.mutation<void, AddCategory>({
+    addNewCategory: builder.mutation<void, CategoryEditableData>({
       query: addCategory => ({
         url: '/categories',
         method: 'POST',
         body: {
           ...addCategory,
+        },
+      }),
+      invalidatesTags: [{ type: 'Category', id: 'LIST' }],
+    }),
+    updateCategory: builder.mutation<Category, CategoryEditableData>({
+      query: category => ({
+        url: '/categories',
+        method: 'PATCH',
+        body: {
+          ...category,
         },
       }),
       invalidatesTags: [{ type: 'Category', id: 'LIST' }],
