@@ -1,7 +1,12 @@
 import prisma from '@/core/server/lib/prisma'
-import { AddCategory, CategoryFullModel } from '../../common'
+import {
+  AddCategory,
+  ArchiveCategory,
+  FetchCategories,
+  UpdateCategory,
+} from '../../common'
 
-export const fetchAll = async () => {
+export const fetchCategories = async () => {
   const categories = await prisma.category.findMany({
     where: { parent: null, archived: false },
     include: {
@@ -13,24 +18,37 @@ export const fetchAll = async () => {
       createdAt: 'asc',
     },
   })
-  return categories as CategoryFullModel[]
+  return categories as FetchCategories.Model[]
 }
 
-export const archive = async (categoryId: string, archive = true) => {
+export const archiveCategory = async (categoryId: string, archive = true) => {
   const category = await prisma.category.update({
     data: {
       archived: archive,
     },
     where: { id: categoryId },
   })
-  return category as CategoryFullModel
+  return category as ArchiveCategory.Model
 }
 
-export const create = async (addCategory: AddCategory) => {
-  const category = (await prisma.category.create({
-    data: addCategory,
-  })) as CategoryFullModel
-  category.subcategories = []
+export const addCategory = async (params: AddCategory.Params) => {
+  const category = await prisma.category.create({
+    data: params,
+  })
 
-  return category
+  return category as AddCategory.Model
+}
+
+export const updateCategory = async (params: UpdateCategory.Params) => {
+  const category = await prisma.category.update({
+    where: {
+      id: params.id,
+    },
+    data: params.changes,
+    include: {
+      subcategories: true,
+    },
+  })
+
+  return category as UpdateCategory.Model
 }

@@ -8,6 +8,7 @@ import {
   AddCategory,
   ArchiveCategory,
   CategoryFullModel,
+  FetchCategories,
   UpdateCategory,
 } from '@/features/category/client'
 import {
@@ -15,7 +16,6 @@ import {
   createEntityAdapter,
   createSelector,
 } from '@reduxjs/toolkit'
-import { FetchCategories } from '../../common/usecases/fetch-categories'
 
 const categoriesAdapter = createEntityAdapter<CategoryFullModel>()
 const initialState = categoriesAdapter.getInitialState()
@@ -30,7 +30,7 @@ export const categoriesApiSlice = apiSlice.injectEndpoints({
       providesTags: result =>
         createTagsFromEntityState('Category', 'LIST', result),
     }),
-    archive: builder.mutation<
+    archiveCategory: builder.mutation<
       EntityState<ArchiveCategory.Model>,
       ArchiveCategory.Params
     >({
@@ -53,10 +53,10 @@ export const categoriesApiSlice = apiSlice.injectEndpoints({
     }),
     updateCategory: builder.mutation<void, UpdateCategory.Params>({
       query: params => ({
-        url: '/categories',
+        url: `/categories/${params.id}`,
         method: 'PATCH',
         body: {
-          ...params,
+          ...params.changes,
         },
       }),
       invalidatesTags: createTags('Category', 'LIST'),
@@ -66,8 +66,9 @@ export const categoriesApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetCategoriesQuery,
-  useArchiveMutation,
+  useArchiveCategoryMutation,
   useAddCategoryMutation,
+  useUpdateCategoryMutation,
 } = categoriesApiSlice
 
 const selectCategoriesData = createSelector(

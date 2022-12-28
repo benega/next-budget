@@ -6,4 +6,4 @@ export type CategoryFullModel = Category & {
   subcategories: CategoryFullModel[]
 }
 
-export type CategoryEditableData = Pick<Category, 'name'>
+export type CategoryEditModel = Pick<Category, 'name'>

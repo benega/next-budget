@@ -1,23 +1,27 @@
 import { makeApi } from '@/core/server/lib'
 import {
   AddCategory,
-  CategoryFullModel,
-  create,
-  fetchAll,
+  FetchCategories,
+  addCategory,
+  fetchCategories,
 } from '@/features/category/server'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default makeApi({
-  get: async (req, res: NextApiResponse<CategoryFullModel[]>) => {
-    const categories = await fetchAll()
-    res.status(200).json(categories)
+  get: async (req, res: NextApiResponse<FetchCategories.Model[]>) => {
+    try {
+      const categories = await fetchCategories()
+      res.json(categories)
+    } catch (e) {
+      console.error('error at GET categories', e)
+      res.status(500)
+    }
   },
   post: async (
     req: NextApiRequest,
-    res: NextApiResponse<CategoryFullModel>
+    res: NextApiResponse<AddCategory.Model>
   ) => {
-    const category = await create(req.body as AddCategory)
-    console.log('created new category', category)
-    res.status(201).json(category)
+    const category = await addCategory(req.body as AddCategory.Params)
+    res.json(category)
   },
 })

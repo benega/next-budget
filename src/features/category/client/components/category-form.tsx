@@ -1,24 +1,28 @@
 import { Modal, useModal } from '@/core/client/components'
-import { Category } from '@prisma/client'
 import React, { useState } from 'react'
-import { CategoryEditableData } from '../../common'
+import {
+  AddCategory,
+  CategoryEditModel,
+  CategoryModel,
+  UpdateCategory,
+} from '../../common'
 import { useAddCategoryMutation } from '../data/categories-slice'
 
 type CategoryFormProps =
   | {
       mode: 'create'
-      onCreate: (category: CategoryEditableData) => void
+      onCreate: (params: AddCategory.Params) => void
       onCancel: () => void
     }
   | {
       mode: 'edit'
-      category: Category
-      onUpdate: (id: string, category: CategoryEditableData) => void
+      category: CategoryModel
+      onUpdate: (params: UpdateCategory.Params) => void
       onCancel: () => void
     }
 
 export const CategoryForm = (props: CategoryFormProps) => {
-  const [data, setData] = useState<CategoryEditableData>(
+  const [data, setData] = useState<CategoryEditModel>(
     props.mode === 'edit' ? { name: props.category.name } : { name: '' }
   )
 
@@ -27,7 +31,12 @@ export const CategoryForm = (props: CategoryFormProps) => {
     if (props.mode === 'create') {
       props.onCreate(data)
     } else {
-      props.onUpdate(props.category.id, data)
+      props.onUpdate({
+        id: props.category.id,
+        changes: {
+          ...data,
+        },
+      })
     }
   }
 
@@ -64,7 +73,7 @@ export const CategoryForm = (props: CategoryFormProps) => {
 export const CreateCategoryFormModal = () => {
   const { modalProps, toggleModal } = useModal()
   const [addCategory] = useAddCategoryMutation()
-  const handleCreate = async (data: CategoryEditableData) => {
+  const handleCreate = async (data: CategoryEditModel) => {
     try {
       await addCategory(data).unwrap()
       toggleModal()

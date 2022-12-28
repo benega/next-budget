@@ -10,10 +10,10 @@ import {
 } from '@/core/client/components'
 import { useAppSelector } from '@/core/client/data'
 import {
-  CategoryEditableData,
   CategoryForm,
   CategoryFullModel,
   CategoryModel,
+  UpdateCategory,
   selectCategoryById,
 } from '@/features/category/client'
 import { useCategoryRow } from './use-category'
@@ -86,7 +86,7 @@ export const EditCategoryButton = ({
   onUpdate,
 }: {
   category: CategoryModel
-  onUpdate: (id: string, category: CategoryEditableData) => void
+  onUpdate: (params: UpdateCategory.Params) => void
 }) => {
   const { modalProps, toggleModal } = useModal()
 
@@ -101,8 +101,8 @@ export const EditCategoryButton = ({
         <CategoryForm
           mode="edit"
           category={category}
-          onUpdate={(id, category) => {
-            onUpdate(id, category)
+          onUpdate={params => {
+            onUpdate(params)
             toggleModal()
           }}
           onCancel={toggleModal}

@@ -1,7 +1,7 @@
-import { CategoryModel } from '../models/category-model'
+import { CategoryEditModel, CategoryModel } from '../models/category-model'
 
 export namespace AddCategory {
-  export type Params = Pick<CategoryModel, 'name'>
+  export type Params = CategoryEditModel
 
   export type Model = CategoryModel
 }
