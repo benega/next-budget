@@ -11,6 +11,7 @@ import { useAddCategoryMutation } from '../data/categories-slice'
 type CategoryFormProps =
   | {
       mode: 'create'
+      parentId?: string
       onCreate: (params: AddCategory.Params) => void
       onCancel: () => void
     }
@@ -29,7 +30,7 @@ export const CategoryForm = (props: CategoryFormProps) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (props.mode === 'create') {
-      props.onCreate(data)
+      props.onCreate({ ...data, parentId: props.parentId })
     } else {
       props.onUpdate({
         id: props.category.id,

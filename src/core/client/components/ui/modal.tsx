@@ -29,6 +29,21 @@ export const Modal = ({
   ) : null
 }
 
+export type ButtonModalProps = {
+  button: (toggleModal: () => void) => React.ReactNode
+  body: (toggleModal: () => void) => React.ReactNode
+}
+export const ButtonModal = ({ button, body }: ButtonModalProps) => {
+  const { modalProps, toggleModal } = useModal()
+
+  return (
+    <>
+      {button(toggleModal)}
+      <Modal {...modalProps}>{body(toggleModal)}</Modal>
+    </>
+  )
+}
+
 type UseModalProps = {
   startOpen?: boolean
 }

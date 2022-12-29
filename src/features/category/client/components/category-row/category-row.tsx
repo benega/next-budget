@@ -1,21 +1,19 @@
 import {
   ArchiveIcon,
-  EditIcon,
   IconButton,
   Loading,
-  Modal,
   SquareMinusIcon,
   SquarePlusIcon,
-  useModal,
 } from '@/core/client/components'
 import { useAppSelector } from '@/core/client/data'
 import {
-  CategoryForm,
   CategoryFullModel,
-  CategoryModel,
-  UpdateCategory,
   selectCategoryById,
 } from '@/features/category/client'
+import {
+  AddSubCategoryButton,
+  EditCategoryButton,
+} from './category-row-actions'
 import { useCategoryRow } from './use-category'
 
 type CategoryRowProps = {
@@ -40,8 +38,11 @@ const InternalCategoryRow = ({ category }: InternalCategoryRowProps) => {
     toggleShowSubcategories,
     archiveCategory,
     updateCategory,
+    addCategory,
     isLoading,
   } = useCategoryRow(category)
+
+  const canAddSubCategory = !category.parentId
 
   return (
     <>
@@ -71,43 +72,15 @@ const InternalCategoryRow = ({ category }: InternalCategoryRowProps) => {
             icon={<ArchiveIcon color="gray" size={24} />}
           />
           <EditCategoryButton category={category} onUpdate={updateCategory} />
+          {canAddSubCategory && (
+            <AddSubCategoryButton category={category} onAdd={addCategory} />
+          )}
         </td>
       </tr>
       {showSubcategories &&
         category?.subcategories.map(c => (
           <InternalCategoryRow key={c.id} category={c} />
         ))}
-    </>
-  )
-}
-
-export const EditCategoryButton = ({
-  category,
-  onUpdate,
-}: {
-  category: CategoryModel
-  onUpdate: (params: UpdateCategory.Params) => void
-}) => {
-  const { modalProps, toggleModal } = useModal()
-
-  return (
-    <>
-      <IconButton
-        className="ml-2"
-        onClick={() => toggleModal()}
-        icon={<EditIcon color="gray" size={24} />}
-      />
-      <Modal {...modalProps}>
-        <CategoryForm
-          mode="edit"
-          category={category}
-          onUpdate={params => {
-            onUpdate(params)
-            toggleModal()
-          }}
-          onCancel={toggleModal}
-        />
-      </Modal>
     </>
   )
 }

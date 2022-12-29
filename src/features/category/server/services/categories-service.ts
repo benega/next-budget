@@ -32,6 +32,8 @@ export const archiveCategory = async (categoryId: string, archive = true) => {
 }
 
 export const addCategory = async (params: AddCategory.Params) => {
+  console.log('server addcategory', params)
+
   const category = await prisma.category.create({
     data: params,
   })

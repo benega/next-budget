@@ -1,4 +1,7 @@
-export { MdOutlineArchive as ArchiveIcon } from 'react-icons/md'
+export {
+  MdAdd as AddIcon,
+  MdOutlineArchive as ArchiveIcon,
+} from 'react-icons/md'
 export {
   TbEdit as EditIcon,
   TbSquareMinus as SquareMinusIcon,
